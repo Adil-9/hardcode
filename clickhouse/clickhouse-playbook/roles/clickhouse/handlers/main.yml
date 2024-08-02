@@ -1,6 +1,0 @@
-# roles/clickhouse/handlers/main.yml
-
-- name: Restart ClickHouse
-  service:
-    name: clickhouse-server
-    state: restarted
