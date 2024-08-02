@@ -1,0 +1,36 @@
+# roles/clickhouse/tasks/main.yml
+
+- name: Add ClickHouse repository key
+  apt_key:
+    url: https://packages.clickhouse.com/keys/clickhouse.asc
+    state: present
+
+- name: Add ClickHouse repository
+  apt_repository:
+    repo: "deb https://packages.clickhouse.com/deb/stable/ main/"
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install ClickHouse packages
+  apt:
+    name: "{{ clickhouse_package }}"
+    state: present
+
+- name: Configure ClickHouse
+  template:
+    src: config.xml.j2
+    dest: /etc/clickhouse-server/config.xml
+    owner: clickhouse
+    group: clickhouse
+    mode: '0644'
+  notify:
+    - Restart ClickHouse
+
+- name: Ensure ClickHouse service is running
+  service:
+    name: clickhouse-server
+    state: started
+    enabled: yes

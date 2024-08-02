@@ -1,0 +1,7 @@
+# playbook.yml
+
+- name: Install and configure ClickHouse
+  hosts: clickhouse_servers
+  become: yes
+  roles:
+    - clickhouse

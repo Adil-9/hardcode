@@ -1,0 +1,21 @@
+<!-- roles/clickhouse/templates/config.xml.j2 -->
+
+<yandex>
+    <!-- Port to listen for native protocol connections -->
+    <tcp_port>9000</tcp_port>
+
+    <!-- Port to listen for HTTP connections -->
+    <http_port>8123</http_port>
+
+    <users>
+        <default>
+            <password></password>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+            <profile>default</profile>
+            <quota>default</quota>
+            <access_management>1</access_management>
+        </default>
+    </users>
+</yandex>
