@@ -1,0 +1,45 @@
+# roles/clickhouse/tasks/main.yml
+
+- name: Add ClickHouse GPG key
+  apt_key:
+    url: https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key  
+    state: present
+
+- name: Add ClickHouse repository without GPG key
+  apt_repository:
+    repo: "deb https://packages.clickhouse.com/deb stable main"
+    state: present
+
+- name: Update APT package index
+  apt:
+    update_cache: yes
+
+- name: Install ClickHouse server and client
+  apt:
+    name:
+      - clickhouse-server
+      - clickhouse-client
+    state: present
+
+- name: Deploy ClickHouse configuration
+  template:
+    src: "{{ clickhouse_config }}"
+    dest: /etc/clickhouse-server/config.d/remote_servers.xml
+  notify:
+    - Restart ClickHouse server #notify
+
+- name: Enable and start ClickHouse server
+  service:
+    name: clickhouse-server
+    state: started
+    enabled: yes
+
+- name: Verify ClickHouse is running
+  command: clickhouse-client --query "SELECT 1"
+  register: clickhouse_check
+  changed_when: false
+  failed_when: "'1' not in clickhouse_check.stdout"
+
+- name: Display ClickHouse status
+  debug:
+    msg: "ClickHouse server is running and responding correctly."

@@ -1,0 +1,17 @@
+<!-- roles/clickhouse/templates/config_192_168_19_130.xml.j2 -->
+<clickhouse>
+    <remote_servers>
+        <my_cluster>
+            <shard>
+                <replica>
+                    <host>192.168.19.130</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>192.168.19.129</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </my_cluster>
+    </remote_servers>
+</clickhouse>
